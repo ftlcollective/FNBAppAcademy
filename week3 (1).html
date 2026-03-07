@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pine City Zoo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#2d6a4f;--light:#74c69d;--dark:#1b4332;
+  --cream:#f5f0e8;--orange:#e76f51;--sand:#f4a261;
+}
+body{font-family:'Segoe UI',sans-serif;background:var(--cream);color:#333}
+
+/* ── NAV ── */
+nav{background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.logo{color:#fff;font-size:1.4rem;font-weight:700;padding:14px 0;cursor:pointer}
+.logo span{color:var(--sand)}
+.nav-links{display:flex;gap:4px}
+.nav-links a{color:#d8f3dc;text-decoration:none;padding:10px 16px;border-radius:6px;font-size:.9rem;transition:.2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{background:var(--green);color:#fff}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── HOME HERO ── */
+.hero{background:linear-gradient(135deg,var(--dark),var(--green));color:#fff;text-align:center;padding:90px 20px 70px}
+.hero h1{font-size:3.2rem;letter-spacing:2px}
+.hero p{font-size:1.2rem;margin:14px 0 30px;opacity:.9}
+.btn{display:inline-block;background:var(--orange);color:#fff;padding:13px 32px;border-radius:30px;text-decoration:none;font-weight:600;border:none;cursor:pointer;transition:.2s;font-size:1rem}
+.btn:hover{background:var(--sand);transform:scale(1.04)}
+.btn-outline{background:transparent;border:2px solid #fff;margin-left:10px}
+.btn-outline:hover{background:#fff;color:var(--dark)}
+
+/* ── SECTION ── */
+section{max-width:1100px;margin:50px auto;padding:0 20px}
+section h2{font-size:1.9rem;color:var(--dark);margin-bottom:6px;border-left:5px solid var(--light);padding-left:12px}
+.sub{color:#666;margin-bottom:28px;margin-left:17px;font-size:.95rem}
+
+/* ── ANIMAL GRID ── */
+.animal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
+.animal-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.09);cursor:pointer;transition:.25s}
+.animal-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(45,106,79,.2)}
+.animal-emoji{font-size:3.5rem;background:var(--cream);text-align:center;padding:24px 10px}
+.animal-info{padding:14px}
+.animal-info h3{font-size:1rem;color:var(--dark)}
+.animal-info p{font-size:.8rem;color:#888;margin-top:4px}
+.tag{display:inline-block;font-size:.72rem;background:#d8f3dc;color:var(--dark);border-radius:20px;padding:2px 10px;margin-top:6px}
+
+/* ── INFO STRIP ── */
+.strip{display:flex;flex-wrap:wrap;gap:16px;margin-top:40px}
+.strip-box{flex:1;min-width:200px;background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--light)}
+.strip-box h3{color:var(--dark);margin-bottom:10px}
+.strip-box p,.strip-box li{font-size:.9rem;color:#555;line-height:1.9}
+.strip-box ul{padding-left:16px}
+
+/* ── ANIMAL DETAIL PAGE ── */
+.detail-hero{background:linear-gradient(135deg,var(--dark),var(--green));color:#fff;padding:60px 20px 40px;text-align:center}
+.detail-hero .big-emoji{font-size:6rem}
+.detail-hero h1{font-size:2.4rem;margin-top:10px}
+.detail-hero .tagline{opacity:.85;margin-top:6px;font-size:1.05rem}
+.detail-body{max-width:900px;margin:40px auto;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:600px){.detail-body{grid-template-columns:1fr}}
+.detail-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.detail-card h3{color:var(--dark);font-size:1.1rem;margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px}
+.detail-card p,.detail-card li{font-size:.92rem;color:#555;line-height:1.8}
+.detail-card ul{padding-left:18px}
+.fact-badge{display:inline-block;background:var(--orange);color:#fff;border-radius:8px;padding:6px 14px;font-size:.85rem;margin:4px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--dark);cursor:pointer;font-weight:600;margin:20px;font-size:.95rem;background:none;border:none;text-decoration:underline}
+
+/* ── MAP PAGE ── */
+.map-wrap{display:grid;grid-template-columns:1fr 280px;gap:24px;max-width:1100px;margin:40px auto;padding:0 20px}
+@media(max-width:700px){.map-wrap{grid-template-columns:1fr}}
+.zoo-map{background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.1);position:relative}
+.zoo-map svg{width:100%;height:auto;border-radius:10px}
+.map-legend{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.map-legend h3{color:var(--dark);margin-bottom:14px;font-size:1.1rem}
+.legend-item{display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer;padding:8px;border-radius:8px;transition:.2s}
+.legend-item:hover{background:var(--cream)}
+.leg-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0}
+.legend-item p{font-size:.85rem;color:#555;margin-top:2px}
+.map-tooltip{position:absolute;background:rgba(27,67,50,.92);color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;pointer-events:none;display:none;z-index:10;white-space:nowrap}
+
+/* ── CONTACT PAGE ── */
+.contact-wrap{max-width:1000px;margin:50px auto;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+@media(max-width:650px){.contact-wrap{grid-template-columns:1fr}}
+.contact-form{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 16px rgba(0,0,0,.09)}
+.contact-form h2{color:var(--dark);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.88rem;color:#555;margin-bottom:5px;font-weight:600}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:.95rem;transition:.2s;background:#fafafa;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--green);outline:none;background:#fff}
+.form-group textarea{height:120px;resize:vertical}
+.form-success{display:none;background:#d8f3dc;border:1px solid var(--light);border-radius:8px;padding:16px;color:var(--dark);font-weight:600;margin-top:14px;text-align:center}
+.contact-info{display:flex;flex-direction:column;gap:16px}
+.info-card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 3px 12px rgba(0,0,0,.08);display:flex;gap:14px;align-items:flex-start}
+.info-icon{font-size:1.8rem;flex-shrink:0}
+.info-card h4{color:var(--dark);margin-bottom:4px}
+.info-card p{font-size:.88rem;color:#666;line-height:1.7}
+.social-row{display:flex;gap:10px;margin-top:6px}
+.social-btn{padding:8px 16px;border-radius:20px;border:none;cursor:pointer;font-size:.82rem;font-weight:600;transition:.2s}
+.social-btn:hover{transform:scale(1.05)}
+.fb{background:#1877f2;color:#fff}
+.tw{background:#1da1f2;color:#fff}
+.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:#74c69d;text-align:center;padding:28px 20px;margin-top:60px;font-size:.88rem;line-height:1.8}
+footer a{color:var(--sand);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="logo" onclick="goTo('home')">🦁 Pine City <span>Zoo</span></div>
+  <div class="nav-links">
+    <a onclick="goTo('home')" id="nav-home" class="active">Home</a>
+    <a onclick="goTo('animals')" id="nav-animals">Animals</a>
+    <a onclick="goTo('map')" id="nav-map">Zoo Map</a>
+    <a onclick="goTo('visit')" id="nav-visit">Plan Visit</a>
+    <a onclick="goTo('contact')" id="nav-contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>🌿 Pine City Zoo</h1>
+    <p>Discover wildlife. Inspire conservation. Create memories that last a lifetime.</p>
+    <button class="btn" onclick="goTo('animals')">Meet Our Animals</button>
+    <button class="btn btn-outline" onclick="goTo('map')">View Zoo Map</button>
+  </div>
+
+  <section>
+    <h2>🐾 Featured Animals</h2>
+    <p class="sub">Click any animal to learn more about them</p>
+    <div class="animal-grid" id="home-grid"></div>
+  </section>
+
+  <section>
+    <div class="strip">
+      <div class="strip-box">
+        <h3>🕐 Opening Hours</h3>
+        <ul>
+          <li>Mon – Fri: 08:00 – 17:00</li>
+          <li>Sat – Sun: 07:00 – 18:00</li>
+          <li>Public Holidays: 09:00 – 15:00</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>🎟️ Ticket Prices</h3>
+        <ul>
+          <li>Adults: R150</li>
+          <li>Children (under 12): R80</li>
+          <li>Pensioners: R100</li>
+          <li>Family Package (2+2): R400</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>🚌 Getting Here</h3>
+        <p>1 Wildlife Ave, Pine City, 1234<br>Ample free parking available.<br>Bus route 42 stops at the main gate.</p>
+      </div>
+      <div class="strip-box">
+        <h3>🎪 Today's Events</h3>
+        <ul>
+          <li>10:00 – Giraffe feeding</li>
+          <li>12:00 – Penguin parade</li>
+          <li>14:00 – Big cat talk</li>
+          <li>16:00 – Elephant wash</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════ ANIMALS PAGE ══════════════ -->
+<div class="page" id="page-animals">
+  <div class="hero" style="padding:50px 20px 40px">
+    <h1 style="font-size:2.2rem">🐾 Our Animals</h1>
+    <p>We are home to over 200 species from across the globe.</p>
+  </div>
+  <section>
+    <h2>All Animals</h2>
+    <p class="sub">Click any animal to learn more</p>
+    <div class="animal-grid" id="all-grid"></div>
+  </section>
+</div>
+
+<!-- ══════════════ ANIMAL DETAIL PAGE ══════════════ -->
+<div class="page" id="page-detail">
+  <button class="back-btn" id="back-btn">← Back to Animals</button>
+  <div class="detail-hero">
+    <div class="big-emoji" id="d-emoji"></div>
+    <h1 id="d-name"></h1>
+    <p class="tagline" id="d-tagline"></p>
+  </div>
+  <div class="detail-body">
+    <div class="detail-card">
+      <h3>📖 About</h3>
+      <p id="d-about"></p>
+    </div>
+    <div class="detail-card">
+      <h3>⚡ Quick Facts</h3>
+      <div id="d-facts"></div>
+    </div>
+    <div class="detail-card">
+      <h3>🌍 Habitat & Diet</h3>
+      <p><strong>Habitat:</strong> <span id="d-habitat"></span></p>
+      <br/>
+      <p><strong>Diet:</strong> <span id="d-diet"></span></p>
+    </div>
+    <div class="detail-card">
+      <h3>🛡️ Conservation Status</h3>
+      <p id="d-conservation"></p>
+      <br/>
+      <h3 style="margin-top:14px">🕐 Feeding Times</h3>
+      <p id="d-feeding"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MAP PAGE ══════════════ -->
+<div class="page" id="page-map">
+  <div class="hero" style="padding:50px 20px 40px">
+    <h1 style="font-size:2.2rem">🗺️ Zoo Map</h1>
+    <p>Find your way around Pine City Zoo. Click any zone to learn more.</p>
+  </div>
+  <div class="map-wrap">
+    <div class="zoo-map">
+      <div class="map-tooltip" id="tooltip"></div>
+      <svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background -->
+        <rect width="600" height="480" fill="#c8e6c9" rx="12"/>
+        <!-- Paths -->
+        <rect x="0" y="220" width="600" height="14" fill="#f5f0e8" opacity=".8"/>
+        <rect x="290" y="0" width="14" height="480" fill="#f5f0e8" opacity=".8"/>
+        <rect x="145" y="220" width="14" height="260" fill="#f5f0e8" opacity=".6"/>
+        <rect x="440" y="220" width="14" height="260" fill="#f5f0e8" opacity=".6"/>
+        <!-- Main gate -->
+        <rect x="260" y="450" width="80" height="30" fill="#795548" rx="4"/>
+        <text x="300" y="470" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">MAIN GATE</text>
+        <!-- Zones -->
+        <g class="zone" data-zone="African Savanna 🦁🦒🦓" style="cursor:pointer" onclick="highlightZone(this)">
+          <rect x="20" y="20" width="260" height="190" fill="#ff8f00" rx="10" opacity=".75"/>
+          <text x="150" y="80" text-anchor="middle" fill="#fff" font-size="28">🦁</text>
+          <text x="150" y="120" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">African Savanna</text>
+          <text x="150" y="138" text-anchor="middle" fill="#fff" font-size="10">Lions · Giraffes · Zebras</text>
+        </g>
+        <g class="zone" data-zone="Aquatic World 🐧🦭🐊" style="cursor:pointer" onclick="highlightZone(this)">
+          <rect x="310" y="20" width="270" height="190" fill="#0288d1" rx="10" opacity=".75"/>
+          <text x="445" y="80" text-anchor="middle" fill="#fff" font-size="28">🐧</text>
+          <text x="445" y="120" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Aquatic World</text>
+          <text x="445" y="138" text-anchor="middle" fill="#fff" font-size="10">Penguins · Seals · Crocs</text>
+        </g>
+        <g class="zone" data-zone="Jungle Zone 🦍🐍🦜" style="cursor:pointer" onclick="highlightZone(this)">
+          <rect x="20" y="244" width="115" height="190" fill="#388e3c" rx="10" opacity=".75"/>
+          <text x="77" y="300" text-anchor="middle" fill="#fff" font-size="26">🦍</text>
+          <text x="77" y="336" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">Jungle Zone</text>
+          <text x="77" y="354" text-anchor="middle" fill="#fff" font-size="9">Gorillas · Snakes</text>
+        </g>
+        <g class="zone" data-zone="Kids Farm 🐑🐖🐔" style="cursor:pointer" onclick="highlightZone(this)">
+          <rect x="159" y="244" width="122" height="190" fill="#f06292" rx="10" opacity=".75"/>
+          <text x="220" y="300" text-anchor="middle" fill="#fff" font-size="26">🐑</text>
+          <text x="220" y="336" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">Kids Farm</text>
+          <text x="220" y="354" text-anchor="middle" fill="#fff" font-size="9">Sheep · Pigs · Hens</text>
+        </g>
+        <g class="zone" data-zone="Reptile House 🦎🐢🐍" style="cursor:pointer" onclick="highlightZone(this)">
+          <rect x="454" y="244" width="126" height="190" fill="#6d4c41" rx="10" opacity=".75"/>
+          <text x="517" y="300" text-anchor="middle" fill="#fff" font-size="26">🦎</text>
+          <text x="517" y="336" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">Reptile House</text>
+          <text x="517" y="354" text-anchor="middle" fill="#fff" font-size="9">Lizards · Turtles</text>
+        </g>
+        <!-- Facilities -->
+        <g style="cursor:pointer" onclick="showTooltip(event,'🍔 Food Court – burgers, snacks & drinks')">
+          <circle cx="300" cy="160" r="22" fill="#fff" opacity=".9"/>
+          <text x="300" y="166" text-anchor="middle" font-size="20">🍔</text>
+        </g>
+        <g style="cursor:pointer" onclick="showTooltip(event,'🛁 Restrooms – clean facilities near every zone')">
+          <circle cx="300" cy="320" r="22" fill="#fff" opacity=".9"/>
+          <text x="300" y="326" text-anchor="middle" font-size="20">🚻</text>
+        </g>
+        <g style="cursor:pointer" onclick="showTooltip(event,'🏥 First Aid Station – trained staff on duty')">
+          <circle cx="555" cy="420" r="20" fill="#fff" opacity=".9"/>
+          <text x="555" y="426" text-anchor="middle" font-size="18">🏥</text>
+        </g>
+        <g style="cursor:pointer" onclick="showTooltip(event,'🛍️ Gift Shop – souvenirs, toys & books')">
+          <circle cx="45" cy="420" r="20" fill="#fff" opacity=".9"/>
+          <text x="45" y="426" text-anchor="middle" font-size="18">🛍️</text>
+        </g>
+        <!-- Compass -->
+        <g transform="translate(555,30)">
+          <circle r="22" fill="#fff" opacity=".85"/>
+          <text y="-8" text-anchor="middle" font-size="10" fill="#333" font-weight="bold">N</text>
+          <text y="14" text-anchor="middle" font-size="10" fill="#333">S</text>
+          <text x="-12" y="4" text-anchor="middle" font-size="10" fill="#333">W</text>
+          <text x="12" y="4" text-anchor="middle" font-size="10" fill="#333">E</text>
+        </g>
+      </svg>
+    </div>
+    <div class="map-legend">
+      <h3>📍 Map Legend</h3>
+      <div class="legend-item"><div class="leg-dot" style="background:#ff8f00"></div><div><strong>African Savanna</strong><p>Lions, Giraffes, Zebras, Elephants</p></div></div>
+      <div class="legend-item"><div class="leg-dot" style="background:#0288d1"></div><div><strong>Aquatic World</strong><p>Penguins, Seals, Crocodiles</p></div></div>
+      <div class="legend-item"><div class="leg-dot" style="background:#388e3c"></div><div><strong>Jungle Zone</strong><p>Gorillas, Parrots, Snakes</p></div></div>
+      <div class="legend-item"><div class="leg-dot" style="background:#f06292"></div><div><strong>Kids Farm</strong><p>Sheep, Pigs, Hens, Rabbits</p></div></div>
+      <div class="legend-item"><div class="leg-dot" style="background:#6d4c41"></div><div><strong>Reptile House</strong><p>Lizards, Turtles, Tortoises</p></div></div>
+      <hr style="margin:14px 0;border-color:#eee"/>
+      <h3 style="margin-bottom:10px">🏢 Facilities</h3>
+      <div class="legend-item"><div style="font-size:1.3rem">🍔</div><div><strong>Food Court</strong><p>Central plaza</p></div></div>
+      <div class="legend-item"><div style="font-size:1.3rem">🚻</div><div><strong>Restrooms</strong><p>Near every zone</p></div></div>
+      <div class="legend-item"><div style="font-size:1.3rem">🏥</div><div><strong>First Aid</strong><p>South-east corner</p></div></div>
+      <div class="legend-item"><div style="font-size:1.3rem">🛍️</div><div><strong>Gift Shop</strong><p>Near main gate</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PLAN VISIT PAGE ══════════════ -->
+<div class="page" id="page-visit">
+  <div class="hero" style="padding:50px 20px 40px">
+    <h1 style="font-size:2.2rem">🎟️ Plan Your Visit</h1>
+    <p>Everything you need to know before you arrive.</p>
+  </div>
+  <section>
+    <div class="strip">
+      <div class="strip-box">
+        <h3>🕐 Opening Hours</h3>
+        <ul>
+          <li>Monday – Friday: 08:00 – 17:00</li>
+          <li>Saturday – Sunday: 07:00 – 18:00</li>
+          <li>Public Holidays: 09:00 – 15:00</li>
+          <li>Christmas Day: Closed</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>🎟️ Ticket Prices</h3>
+        <ul>
+          <li>Adults: R150</li>
+          <li>Children (3–12): R80</li>
+          <li>Under 3: FREE</li>
+          <li>Pensioners (60+): R100</li>
+          <li>Family Pack (2+2): R400</li>
+          <li>Annual Pass: R600</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>🚗 Getting Here</h3>
+        <p><strong>Address:</strong> 1 Wildlife Avenue, Pine City, 1234</p>
+        <br/>
+        <p><strong>By car:</strong> Take the N14 and exit at Wildlife Ave. Free parking for 800 vehicles.</p>
+        <br/>
+        <p><strong>By bus:</strong> Route 42 stops at main gate. Runs every 30 min.</p>
+      </div>
+    </div>
+    <div class="strip" style="margin-top:16px">
+      <div class="strip-box">
+        <h3>🍔 Food & Drink</h3>
+        <ul>
+          <li>Central Food Court (near plaza)</li>
+          <li>Safari Café (African Savanna)</li>
+          <li>Aqua Snack Bar (Aquatic World)</li>
+          <li>Ice Cream Kiosk (Kids Farm)</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>📅 Daily Shows</h3>
+        <ul>
+          <li>10:00 – Giraffe feeding</li>
+          <li>11:00 – Penguin parade</li>
+          <li>12:30 – Reptile talk</li>
+          <li>14:00 – Big cat keeper talk</li>
+          <li>16:00 – Elephant wash</li>
+        </ul>
+      </div>
+      <div class="strip-box">
+        <h3>♿ Accessibility</h3>
+        <ul>
+          <li>Wheelchair-friendly paths throughout</li>
+          <li>Wheelchair hire at main gate</li>
+          <li>Accessible restrooms in every zone</li>
+          <li>Tactile maps available on request</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════ CONTACT PAGE ══════════════ -->
+<div class="page" id="page-contact">
+  <div class="hero" style="padding:50px 20px 40px">
+    <h1 style="font-size:2.2rem">📬 Contact Us</h1>
+    <p>We'd love to hear from you. Send us a message or find us below.</p>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-form">
+      <h2>Send a Message</h2>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="cf-name" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="cf-email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="cf-phone" placeholder="011 000 0000"/>
+      </div>
+      <div class="form-group">
+        <label>Subject *</label>
+        <select id="cf-subject">
+          <option value="">Select a topic...</option>
+          <option>General Enquiry</option>
+          <option>Booking & Tickets</option>
+          <option>School Group Visit</option>
+          <option>Animal Information</option>
+          <option>Accessibility Support</option>
+          <option>Complaint / Feedback</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message *</label>
+        <textarea id="cf-msg" placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="btn" onclick="submitForm()">Send Message 📤</button>
+      <div class="form-success" id="form-success">✅ Thanks! Your message has been sent. We'll respond within 2 business days.</div>
+    </div>
+    <div class="contact-info">
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <div><h4>Address</h4><p>1 Wildlife Avenue<br/>Pine City, 1234<br/>South Africa</p></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📞</div>
+        <div><h4>Phone</h4><p>011 000 1234 (General)<br/>011 000 5678 (Groups & Schools)<br/>Mon–Fri: 08:00–16:30</p></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">✉️</div>
+        <div><h4>Email</h4><p>info@pinecityzoo.co.za<br/>groups@pinecityzoo.co.za<br/>media@pinecityzoo.co.za</p></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🌐</div>
+        <div>
+          <h4>Follow Us</h4>
+          <p>Stay updated on events & new arrivals</p>
+          <div class="social-row">
+            <button class="social-btn fb">Facebook</button>
+            <button class="social-btn tw">Twitter</button>
+            <button class="social-btn ig">Instagram</button>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🎓</div>
+        <div><h4>Educational Visits</h4><p>We welcome school and university groups. Contact our education team to arrange a tailored tour with keeper talks.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <p>🦁 <strong>Pine City Zoo</strong> · Conserving Wildlife, Inspiring People</p>
+  <p style="margin-top:6px">1 Wildlife Avenue, Pine City, 1234 · 📞 011 000 1234 · ✉️ info@pinecityzoo.co.za</p>
+  <p style="margin-top:8px;opacity:.6">© 2024 Pine City Zoo · FNB App Academy – Week 3</p>
+</footer>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+const animals = [
+  {
+    id:'lion', emoji:'🦁', name:'African Lion', zone:'African Savanna',
+    tagline:'The king of the savanna — proud, powerful, and majestic.',
+    about:'The African Lion is the only truly social big cat, living in groups called prides of up to 30 individuals. Males are famous for their impressive manes, which signal strength and health. Lions spend up to 20 hours a day resting and are most active at dawn and dusk. Pine City Zoo is home to a pride of six lions including two magnificent males.',
+    facts:['Lifespan: 10–14 years in the wild','Weight: 120–250 kg','Speed: Up to 80 km/h','Status: Vulnerable','Group: Called a "pride"','Roar: Heard up to 8 km away'],
+    habitat:'Open woodlands, grasslands, and savannas across sub-Saharan Africa.',
+    diet:'Carnivore – wildebeest, zebra, buffalo, and smaller mammals.',
+    conservation:'Vulnerable. African lion populations have declined by 43% over the last 21 years due to habitat loss and human-wildlife conflict. Pine City Zoo contributes to the African Lion Conservation Programme.',
+    feeding:'Daily keeper talks at 14:00. Feeding demonstrations on weekends at 14:30.'
+  },
+  {
+    id:'elephant', emoji:'🐘', name:'African Elephant', zone:'African Savanna',
+    tagline:'The largest land animal on Earth — gentle, intelligent, and ancient.',
+    about:'African Elephants are the world\'s largest land animals. They are highly intelligent, display complex emotions, and form strong family bonds. Our herd of four elephants is led by a matriarch named Thandi, who arrived in 2018. Elephants communicate through infrasound — frequencies too low for humans to hear — and can detect vibrations through their feet.',
+    facts:['Lifespan: 60–70 years','Weight: Up to 6,000 kg','Trunk: Has 40,000 muscles','Status: Vulnerable','Memory: Exceptional long-term','Eat: 150 kg of food per day'],
+    habitat:'Savannas, forests, and river valleys across sub-Saharan Africa.',
+    diet:'Herbivore – grasses, leaves, bark, fruits, and roots.',
+    conservation:'Vulnerable. The main threats are poaching for ivory and habitat fragmentation. Our zoo funds anti-poaching rangers in the Limpopo region.',
+    feeding:'Elephant wash & feeding at 16:00 daily. A once-in-a-lifetime experience!'
+  },
+  {
+    id:'giraffe', emoji:'🦒', name:'Giraffe', zone:'African Savanna',
+    tagline:'The tallest living animal — graceful, calm, and surprisingly fast.',
+    about:'Giraffes are the tallest animals on Earth, with their necks alone reaching up to 1.8 metres. Despite their long necks, they have the same number of vertebrae as humans — just seven, each up to 25 cm long. Our two giraffes, Langa and Nkosi, love morning enrichment sessions and can often be seen browsing from the top of our specially designed feeding platforms.',
+    facts:['Height: Up to 5.8 m','Weight: Up to 1,900 kg','Tongue: 45 cm long, dark blue','Status: Vulnerable','Sleep: Only 30 min per day','Run: Up to 60 km/h'],
+    habitat:'Savanna, grasslands, and open woodland in sub-Saharan Africa.',
+    diet:'Herbivore – mostly acacia tree leaves. Eats up to 34 kg of foliage per day.',
+    conservation:'Vulnerable. Giraffe numbers have dropped by 40% in the past 30 years. Our zoo participates in the Giraffe Conservation Foundation\'s breeding programme.',
+    feeding:'Morning feeding platform: 10:00 daily. Guests can hand-feed under keeper supervision (included in ticket).'
+  },
+  {
+    id:'zebra', emoji:'🦓', name:'Zebra', zone:'African Savanna',
+    tagline:'No two stripe patterns are the same — nature\'s unique fingerprint.',
+    about:'Zebras are one of Africa\'s most recognisable animals. Their bold black-and-white stripes are unique to each individual — like a human fingerprint — and may help confuse predators, regulate body temperature, and even deter biting insects. Our herd of five Burchell\'s Zebras grazes alongside the giraffe enclosure, making for one of the zoo\'s most scenic views.',
+    facts:['Lifespan: 20–30 years','Weight: 300–450 kg','Stripe pattern: Unique to each','Status: Near Threatened','Social: Live in family herds','Sleep: Standing up'],
+    habitat:'Savannas, grasslands, and mountains of eastern and southern Africa.',
+    diet:'Herbivore – mainly grasses, but also leaves, shrubs, and bark.',
+    conservation:'Near Threatened. Habitat loss and hunting for their distinctive hides remain key threats. We support grassland protection initiatives in the Kruger region.',
+    feeding:'Graze freely throughout the day. Best viewed at 08:00–10:00 and 15:00–17:00.'
+  },
+  {
+    id:'penguin', emoji:'🐧', name:'African Penguin', zone:'Aquatic World',
+    tagline:'The continent\'s only penguin — charismatic, cheeky, and endangered.',
+    about:'The African Penguin, also called the "jackass penguin" for its donkey-like bray, is the only penguin species native to Africa. Our colony of 18 penguins is one of the zoo\'s biggest crowd-pleasers. They are excellent swimmers, reaching speeds of 20 km/h underwater, and are surprisingly agile on land. Our Penguin Parade at 11:00 is a must-see event.',
+    facts:['Lifespan: 10–27 years','Speed: 20 km/h swimming','Status: Endangered','Colonies: Breed on SA coastline','Noise: Sounds like a donkey','Partners: Monogamous for life'],
+    habitat:'Rocky islands and coastlines of southern Africa, especially around the Cape.',
+    diet:'Carnivore – mainly sardines, anchovies, and squid.',
+    conservation:'Endangered. Oil spills, overfishing of prey species, and climate change are major threats. Pine City Zoo is a partner in the SANCCOB seabird rehabilitation programme.',
+    feeding:'Penguin parade & feeding at 11:00 and 15:30. Up-close experience — don\'t miss it!'
+  },
+  {
+    id:'crocodile', emoji:'🐊', name:'Nile Crocodile', zone:'Aquatic World',
+    tagline:'Ancient predators that have barely changed in 200 million years.',
+    about:'The Nile Crocodile is Africa\'s largest reptile and one of the most fearsome predators on the continent. Despite their fearsome reputation, crocodiles are remarkably caring parents — females guard their nests fiercely and gently carry hatchlings to the water in their mouths. Our three crocodiles are housed in a climate-controlled wetland exhibit with underwater viewing panels.',
+    facts:['Lifespan: 70–100 years','Weight: Up to 750 kg','Length: Up to 6 m','Status: Least Concern','Bite: Most powerful in nature','Can hold breath: 2 hours'],
+    habitat:'Rivers, lakes, wetlands, and estuaries across sub-Saharan Africa.',
+    diet:'Carnivore – fish, birds, mammals. Swallows stones to aid digestion.',
+    conservation:'Least Concern, but historically threatened by hunting for their skin. Legal protections have helped populations recover significantly.',
+    feeding:'Feeding demonstrations every Wednesday and Saturday at 13:00 — a spectacular display of power.'
+  },
+  {
+    id:'gorilla', emoji:'🦍', name:'Mountain Gorilla', zone:'Jungle Zone',
+    tagline:'Our closest great ape relatives — 98.3% the same DNA as humans.',
+    about:'Mountain Gorillas are our closest great ape relatives, sharing 98.3% of human DNA. They live in tight-knit family groups led by a dominant silverback male. Our troop of four — silverback Bayo, two females, and an infant — arrived through an international conservation breeding partnership. Gorillas are highly intelligent and have been observed making and using tools.',
+    facts:['Lifespan: 35–40 years','Weight: Up to 200 kg','Status: Endangered','Troop size: 5–30 individuals','DNA match: 98.3% human','Hands: Highly dexterous'],
+    habitat:'Mountain forests and bamboo zones of central and east Africa.',
+    diet:'Herbivore – mainly leaves, shoots, stems, and fruit.',
+    conservation:'Endangered. Only around 1,000 mountain gorillas remain in the wild. Our zoo funds ranger patrols in the Bwindi Impenetrable Forest, Uganda.',
+    feeding:'Enrichment sessions with keepers daily at 09:30 and 14:00. Educational talks Mon, Wed & Fri at 11:00.'
+  },
+  {
+    id:'parrot', emoji:'🦜', name:'African Grey Parrot', zone:'Jungle Zone',
+    tagline:'Considered the most intelligent bird in the world.',
+    about:'The African Grey Parrot is widely regarded as the most intelligent bird species. They can learn vocabularies of hundreds of words, understand concepts like colour and number, and even demonstrate basic reasoning. Our aviary houses six African Greys, two of whom — Einstein and Nova — actively engage with keepers and visitors during daily interaction sessions.',
+    facts:['Lifespan: 40–60 years','Vocabulary: 200+ words','Status: Endangered','Intelligence: Comparable to a 5-year-old','Native to: Central Africa','Bond: Mate for life'],
+    habitat:'Dense forests, forest edges, and mangroves of west and central Africa.',
+    diet:'Omnivore – seeds, nuts, fruit, and occasionally insects.',
+    conservation:'Endangered. The illegal pet trade has devastated wild populations. Pine City Zoo works with CITES to combat trafficking of this species.',
+    feeding:'Interactive keeper sessions daily at 10:30 and 15:00 in the aviary. Visitors may receive a personal greeting!'
+  },
+  {
+    id:'lizard', emoji:'🦎', name:'Monitor Lizard', zone:'Reptile House',
+    tagline:'One of Africa\'s most ancient and impressive reptiles.',
+    about:'The Nile Monitor, Africa\'s largest lizard, is a formidable predator and one of the most intelligent reptiles in the world. They are active hunters and excellent swimmers. Our Reptile House is home to three Nile Monitors in a carefully temperature-controlled habitat that replicates the warm, humid conditions of a riverside African environment.',
+    facts:['Lifespan: 10–20 years','Length: Up to 2.5 m','Weight: Up to 20 kg','Status: Least Concern','Tongue: Forked – smells with it','Can swim: Excellent swimmers'],
+    habitat:'Rivers, lakes, and wetlands across sub-Saharan Africa.',
+    diet:'Carnivore – fish, frogs, eggs, small mammals, and carrion.',
+    conservation:'Least Concern, though they face pressure from habitat loss and hunting in some regions. Important ecosystem role as scavengers and predators.',
+    feeding:'Feeding in the Reptile House on Mondays, Wednesdays, and Fridays at 11:30.'
+  },
+  {
+    id:'turtle', emoji:'🐢', name:'Aldabra Giant Tortoise', zone:'Reptile House',
+    tagline:'Living fossils that can outlive humans by decades.',
+    about:'The Aldabra Giant Tortoise is one of the world\'s largest tortoises and among the longest-lived animals on Earth. Our resident, Kesi, is estimated to be over 90 years old and is one of the zoo\'s most beloved residents. Tortoises are slow-moving but surprisingly strong, capable of carrying a person\'s weight on their shell, though we absolutely don\'t allow that.',
+    facts:['Lifespan: 100+ years','Weight: Up to 300 kg','Speed: 0.3 km/h','Status: Vulnerable','Shell: Up to 1.4 m long','Origin: Aldabra Atoll, Seychelles'],
+    habitat:'Grasslands, scrublands, and coastal dune areas of the Aldabra Atoll.',
+    diet:'Herbivore – grasses, leaves, woody plant stems, and fruit.',
+    conservation:'Vulnerable. Found only on the Aldabra Atoll. Invasive species and habitat change are the main threats. Our zoo supports Seychelles Islands Foundation conservation work.',
+    feeding:'Tortoise feeding experience daily at 09:00 and 13:00 — a family favourite!'
+  },
+  {
+    id:'sheep', emoji:'🐑', name:'Merino Sheep', zone:'Kids Farm',
+    tagline:'Fluffy, friendly, and perfect for the little ones.',
+    about:'The Kids Farm is home to our friendly Merino sheep, a breed originally from Spain and now one of the most common breeds in South Africa. Merinos are known for producing very fine, soft wool. Children can meet and pet our sheep, and on selected weekends they can take part in feeding and gentle grooming sessions — a guaranteed hit with kids of all ages.',
+    facts:['Lifespan: 10–12 years','Wool: Sheared once a year','Wool weight: Up to 10 kg','Status: Domesticated','Origin: Spain','Group: Called a "flock"'],
+    habitat:'Farmland, grasslands, and meadows.',
+    diet:'Herbivore – grass, hay, and plants.',
+    conservation:'Domesticated and not endangered. The Kids Farm focuses on educating young visitors about responsible farming and animal welfare.',
+    feeding:'Kids feeding sessions at 10:00, 12:00, and 15:00. Perfect for children aged 2–10!'
+  },
+  {
+    id:'penguin2', emoji:'🐖', name:'Pot-Bellied Pig', zone:'Kids Farm',
+    tagline:'Surprisingly clean, highly intelligent, and utterly adorable.',
+    about:'Our pot-bellied pigs are among the most popular residents in the Kids Farm. Despite common misconceptions, pigs are actually quite clean animals and are ranked among the top five most intelligent animals in the world. Our three pigs — Biscuit, Gravy, and Crumpet — love enrichment activities and have been trained to respond to their names and perform simple tasks.',
+    facts:['Lifespan: 12–18 years','Weight: 40–70 kg','Intelligence: Ranked in top 5','Status: Domesticated','Can learn: Over 30 commands','Sense of smell: Extraordinary'],
+    habitat:'Domesticated – originally from China and Vietnam.',
+    diet:'Omnivore – vegetables, fruit, grains, and protein pellets.',
+    conservation:'Domesticated. Our Kids Farm focuses on teaching children where food comes from and the importance of treating animals with kindness and respect.',
+    feeding:'Interaction sessions at 10:30 and 14:30. Kids can help a keeper feed and talk to the pigs.'
+  },
+];
+
+let fromPage = 'home';
+
+function renderGrids() {
+  const featured = animals.slice(0, 6);
+  document.getElementById('home-grid').innerHTML = featured.map(a => cardHTML(a)).join('');
+  document.getElementById('all-grid').innerHTML = animals.map(a => cardHTML(a)).join('');
+}
+
+function cardHTML(a) {
+  return `<div class="animal-card" onclick="openAnimal('${a.id}')">
+    <div class="animal-emoji">${a.emoji}</div>
+    <div class="animal-info">
+      <h3>${a.name}</h3>
+      <p>${a.tagline.substring(0,50)}...</p>
+      <span class="tag">📍 ${a.zone}</span>
+    </div>
+  </div>`;
+}
+
+function openAnimal(id) {
+  const a = animals.find(x => x.id === id);
+  if (!a) return;
+  fromPage = document.querySelector('.page.active').id.replace('page-','');
+  document.getElementById('d-emoji').textContent = a.emoji;
+  document.getElementById('d-name').textContent = a.name;
+  document.getElementById('d-tagline').textContent = a.tagline;
+  document.getElementById('d-about').textContent = a.about;
+  document.getElementById('d-facts').innerHTML = a.facts.map(f => `<span class="fact-badge">${f}</span>`).join('');
+  document.getElementById('d-habitat').textContent = a.habitat;
+  document.getElementById('d-diet').textContent = a.diet;
+  document.getElementById('d-conservation').textContent = a.conservation;
+  document.getElementById('d-feeding').textContent = a.feeding;
+  document.getElementById('back-btn').onclick = () => goTo(fromPage);
+  goTo('detail');
+}
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function highlightZone(el) {
+  const zone = el.getAttribute('data-zone');
+  document.querySelectorAll('.zone rect').forEach(r => r.setAttribute('opacity', '.4'));
+  el.querySelector('rect').setAttribute('opacity', '.95');
+  const tt = document.getElementById('tooltip');
+  tt.textContent = '📍 ' + zone;
+  tt.style.display = 'block';
+  tt.style.top = '10px';
+  tt.style.left = '50%';
+  tt.style.transform = 'translateX(-50%)';
+  setTimeout(() => {
+    document.querySelectorAll('.zone rect').forEach(r => r.setAttribute('opacity', '.75'));
+    tt.style.display = 'none';
+  }, 2500);
+}
+
+function showTooltip(e, msg) {
+  const tt = document.getElementById('tooltip');
+  tt.textContent = msg;
+  tt.style.display = 'block';
+  const svg = e.currentTarget.closest('svg');
+  const rect = svg.getBoundingClientRect();
+  tt.style.left = (e.clientX - rect.left) + 'px';
+  tt.style.top  = (e.clientY - rect.top - 50) + 'px';
+  tt.style.transform = 'none';
+  setTimeout(() => { tt.style.display = 'none'; }, 2000);
+}
+
+function submitForm() {
+  const name = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const subject = document.getElementById('cf-subject').value;
+  const msg = document.getElementById('cf-msg').value.trim();
+  if (!name || !email || !subject || !msg) {
+    alert('Please fill in all required fields (*).');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  document.getElementById('cf-name').value = '';
+  document.getElementById('cf-email').value = '';
+  document.getElementById('cf-phone').value = '';
+  document.getElementById('cf-subject').value = '';
+  document.getElementById('cf-msg').value = '';
+  document.getElementById('form-success').style.display = 'block';
+  setTimeout(() => { document.getElementById('form-success').style.display = 'none'; }, 5000);
+}
+
+renderGrids();
+</script>
+</body>
+</html>
