@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 1 – HTML Basics</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f9f9f9; color: #333; }
+    h1 { color: #2c3e50; border-bottom: 3px solid #e67e22; padding-bottom: 10px; }
+    h2 { color: #e67e22; }
+    table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background: #2c3e50; color: white; }
+    form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    input, textarea { display: block; width: 95%; margin: 8px 0 16px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+    img { width: 100%; max-width: 400px; border-radius: 8px; margin: 10px 0; }
+    .badge { background: #2c3e50; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+  <h1>🧱 Week 1 – HTML Basics</h1>
+  <p><span class="badge">FNB App Academy</span></p>
+
+  <h2>📝 Text Elements</h2>
+  <p>This is a <strong>paragraph</strong> with <em>italic</em> and <strong>bold</strong> text. HTML is the backbone of every web page.</p>
+
+  <h2>🔗 Links & Images</h2>
+  <p>Visit <a href="https://www.w3schools.com" target="_blank">W3Schools</a> to learn more about HTML.</p>
+  <img src="https://via.placeholder.com/400x200?text=Week+1+HTML" alt="HTML Placeholder Image" />
+
+  <h2>📋 Lists</h2>
+  <h3>Unordered List</h3>
+  <ul>
+    <li>HTML Structure</li>
+    <li>Text Elements</li>
+    <li>Links &amp; Images</li>
+    <li>Lists &amp; Tables</li>
+    <li>Forms</li>
+  </ul>
+
+  <h3>Ordered List</h3>
+  <ol>
+    <li>Learn HTML</li>
+    <li>Learn CSS</li>
+    <li>Learn JavaScript</li>
+    <li>Learn Python</li>
+  </ol>
+
+  <h2>📊 Table</h2>
+  <table>
+    <thead>
+      <tr><th>Week</th><th>Topic</th><th>Phase</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>HTML Basics</td><td>Beginner</td></tr>
+      <tr><td>2</td><td>CSS Styling</td><td>Beginner</td></tr>
+      <tr><td>3</td><td>Pine City Zoo</td><td>Beginner</td></tr>
+      <tr><td>4</td><td>JavaScript Intro</td><td>Intermediate</td></tr>
+      <tr><td>5</td><td>Calculator App</td><td>Intermediate</td></tr>
+    </tbody>
+  </table>
+
+  <h2>📬 Basic Form</h2>
+  <form>
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" placeholder="Enter your name" />
+
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" placeholder="Enter your email" />
+
+    <label for="message">Message:</label>
+    <textarea id="message" rows="4" placeholder="Write something..."></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>

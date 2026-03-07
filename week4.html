@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 4 – JavaScript Intro</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+    header { background: #161b22; padding: 40px 20px; text-align: center; border-bottom: 1px solid #30363d; }
+    header h1 { color: #f0e68c; font-size: 2rem; }
+    header p { color: #8b949e; margin-top: 8px; }
+    .container { max-width: 900px; margin: 30px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; }
+    .card h2 { color: #58a6ff; margin-bottom: 14px; font-size: 1.1rem; }
+    input, select {
+      background: #0d1117; border: 1px solid #30363d; color: #c9d1d9;
+      padding: 10px 14px; border-radius: 6px; font-size: 1rem; width: 100%; margin-bottom: 10px;
+    }
+    button {
+      background: #238636; color: white; border: none;
+      padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2ea043; }
+    .output {
+      margin-top: 12px; background: #0d1117; border: 1px solid #30363d;
+      padding: 14px; border-radius: 6px; min-height: 40px; color: #7ee787; font-size: 1rem;
+    }
+    .toggle-box { display: none; background: #1c2128; padding: 14px; border-radius: 8px; margin-top: 10px; color: #aaa; }
+    .toggle-box.visible { display: block; }
+    .color-box { width: 100%; height: 80px; border-radius: 10px; margin-top: 10px; transition: background 0.5s; background: #58a6ff; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ Week 4 – JavaScript Intro</h1>
+  <p>DOM manipulation · Events · Logic · Interactivity</p>
+</header>
+
+<div class="container">
+
+  <!-- Demo 1: Greeting -->
+  <div class="card">
+    <h2>👋 Demo 1 – Greeting Generator</h2>
+    <input type="text" id="nameInput" placeholder="Enter your name..." />
+    <button onclick="greet()">Say Hello</button>
+    <div class="output" id="greetOutput">Your greeting will appear here.</div>
+  </div>
+
+  <!-- Demo 2: Show/Hide -->
+  <div class="card">
+    <h2>👁️ Demo 2 – Show / Hide Content</h2>
+    <button onclick="toggleContent()">Toggle Secret Message</button>
+    <div class="toggle-box" id="toggleBox">
+      🎉 You found the hidden content! JavaScript can show and hide anything on the page.
+    </div>
+  </div>
+
+  <!-- Demo 3: Color Changer -->
+  <div class="card">
+    <h2>🎨 Demo 3 – Random Color Generator</h2>
+    <button onclick="changeColor()">Generate Random Color</button>
+    <div class="color-box" id="colorBox"></div>
+    <div class="output" id="colorOutput">Click the button to see the hex color.</div>
+  </div>
+
+  <!-- Demo 4: Counter -->
+  <div class="card">
+    <h2>🔢 Demo 4 – Click Counter</h2>
+    <button onclick="increment()">Click Me!</button>
+    <button onclick="resetCount()" style="background:#b62324; margin-left:8px;">Reset</button>
+    <div class="output" id="counterOutput">Count: 0</div>
+  </div>
+
+  <!-- Demo 5: Simple Calculator Logic -->
+  <div class="card">
+    <h2>🧮 Demo 5 – Quick Math</h2>
+    <input type="number" id="num1" placeholder="First number" />
+    <select id="operator">
+      <option value="+">Add (+)</option>
+      <option value="-">Subtract (−)</option>
+      <option value="*">Multiply (×)</option>
+      <option value="/">Divide (÷)</option>
+    </select>
+    <input type="number" id="num2" placeholder="Second number" />
+    <button onclick="calculate()">Calculate</button>
+    <div class="output" id="mathOutput">Result will appear here.</div>
+  </div>
+
+</div>
+
+<script>
+  function greet() {
+    const name = document.getElementById('nameInput').value.trim();
+    const out = document.getElementById('greetOutput');
+    out.textContent = name ? `Hello, ${name}! Welcome to the world of JavaScript 🚀` : 'Please enter your name first.';
+  }
+
+  function toggleContent() {
+    const box = document.getElementById('toggleBox');
+    box.classList.toggle('visible');
+  }
+
+  let count = 0;
+  function increment() {
+    count++;
+    document.getElementById('counterOutput').textContent = `Count: ${count}`;
+  }
+  function resetCount() {
+    count = 0;
+    document.getElementById('counterOutput').textContent = 'Count: 0';
+  }
+
+  function changeColor() {
+    const hex = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+    document.getElementById('colorBox').style.background = hex;
+    document.getElementById('colorOutput').textContent = `Current color: ${hex}`;
+  }
+
+  function calculate() {
+    const a = parseFloat(document.getElementById('num1').value);
+    const b = parseFloat(document.getElementById('num2').value);
+    const op = document.getElementById('operator').value;
+    const out = document.getElementById('mathOutput');
+    if (isNaN(a) || isNaN(b)) { out.textContent = 'Please enter two valid numbers.'; return; }
+    let result;
+    if (op === '+') result = a + b;
+    else if (op === '-') result = a - b;
+    else if (op === '*') result = a * b;
+    else result = b !== 0 ? a / b : 'Cannot divide by zero!';
+    out.textContent = typeof result === 'number' ? `Result: ${result}` : result;
+  }
+</script>
+</body>
+</html>

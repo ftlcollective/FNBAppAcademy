@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 6 – Contact Book</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+    header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; padding: 40px 20px; text-align: center;
+    }
+    header h1 { font-size: 2rem; }
+    header p { opacity: 0.85; margin-top: 8px; }
+    .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+    .search-bar {
+      display: flex; gap: 10px; margin-bottom: 24px;
+    }
+    .search-bar input {
+      flex: 1; padding: 12px 16px; border: 2px solid #ddd;
+      border-radius: 8px; font-size: 1rem; outline: none;
+      transition: border 0.2s;
+    }
+    .search-bar input:focus { border-color: #667eea; }
+    .search-bar button {
+      background: #667eea; color: white; border: none;
+      padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 1rem;
+    }
+    .search-bar button:hover { background: #5a6fd6; }
+    .status { text-align: center; color: #888; margin: 20px 0; font-size: 0.95rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .contact-card {
+      background: white; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .contact-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(102,126,234,0.2); }
+    .avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.4rem; font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .contact-card h3 { font-size: 1rem; color: #2d3748; }
+    .contact-card p { font-size: 0.85rem; color: #718096; margin-top: 4px; }
+    .contact-card .email { color: #667eea; font-size: 0.82rem; margin-top: 6px; word-break: break-all; }
+    .contact-card .phone { color: #38a169; font-size: 0.82rem; margin-top: 3px; }
+    .modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 10;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: white; border-radius: 16px; padding: 32px;
+      max-width: 420px; width: 90%; position: relative;
+    }
+    .modal .avatar { width: 72px; height: 72px; font-size: 1.8rem; margin: 0 auto 16px; }
+    .modal h2 { text-align: center; color: #2d3748; }
+    .modal .detail { margin-top: 12px; font-size: 0.95rem; color: #555; }
+    .modal .detail span { font-weight: 600; color: #2d3748; }
+    .close-btn {
+      position: absolute; top: 14px; right: 18px;
+      background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #999;
+    }
+    footer { text-align: center; padding: 24px; color: #999; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📇 Contact Book</h1>
+  <p>Week 6 – FNB App Academy · Fetching data from an API</p>
+</header>
+
+<div class="container">
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search contacts by name..." oninput="filterContacts()" />
+    <button onclick="loadContacts()">🔄 Refresh</button>
+  </div>
+  <div class="status" id="status">Loading contacts from API...</div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="close-btn" onclick="closeModalBtn()">✕</button>
+    <div class="avatar" id="mAvatar"></div>
+    <h2 id="mName"></h2>
+    <div class="detail">📧 <span>Email:</span> <span id="mEmail"></span></div>
+    <div class="detail">📞 <span>Phone:</span> <span id="mPhone"></span></div>
+    <div class="detail">🌐 <span>Website:</span> <span id="mWeb"></span></div>
+    <div class="detail">🏙️ <span>City:</span> <span id="mCity"></span></div>
+    <div class="detail">🏢 <span>Company:</span> <span id="mCompany"></span></div>
+  </div>
+</div>
+
+<footer>📇 Contact Book · Week 6 · FNB App Academy · Data from JSONPlaceholder API</footer>
+
+<script>
+  let allContacts = [];
+
+  async function loadContacts() {
+    const status = document.getElementById('status');
+    const grid = document.getElementById('grid');
+    status.textContent = 'Fetching contacts from API...';
+    grid.innerHTML = '';
+    try {
+      const res = await fetch('https://jsonplaceholder.typicode.com/users');
+      allContacts = await res.json();
+      status.textContent = `✅ ${allContacts.length} contacts loaded from JSONPlaceholder API.`;
+      renderContacts(allContacts);
+    } catch {
+      status.textContent = '❌ Failed to fetch contacts. Please check your connection.';
+    }
+  }
+
+  function renderContacts(contacts) {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    if (!contacts.length) { grid.innerHTML = '<p style="color:#999;grid-column:1/-1;text-align:center">No contacts found.</p>'; return; }
+    contacts.forEach(c => {
+      const initials = c.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      const card = document.createElement('div');
+      card.className = 'contact-card';
+      card.innerHTML = `
+        <div class="avatar">${initials}</div>
+        <h3>${c.name}</h3>
+        <p>@${c.username}</p>
+        <p class="email">✉ ${c.email}</p>
+        <p class="phone">📞 ${c.phone}</p>
+      `;
+      card.onclick = () => openModal(c);
+      grid.appendChild(card);
+    });
+  }
+
+  function filterContacts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    renderContacts(allContacts.filter(c => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)));
+  }
+
+  function openModal(c) {
+    const initials = c.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    document.getElementById('mAvatar').textContent = initials;
+    document.getElementById('mName').textContent = c.name;
+    document.getElementById('mEmail').textContent = c.email;
+    document.getElementById('mPhone').textContent = c.phone;
+    document.getElementById('mWeb').textContent = c.website;
+    document.getElementById('mCity').textContent = c.address.city;
+    document.getElementById('mCompany').textContent = c.company.name;
+    document.getElementById('modalBg').classList.add('open');
+  }
+
+  function closeModal(e) { if (e.target.id === 'modalBg') document.getElementById('modalBg').classList.remove('open'); }
+  function closeModalBtn() { document.getElementById('modalBg').classList.remove('open'); }
+
+  loadContacts();
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 5 – Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a2e;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; font-family: 'Segoe UI', sans-serif;
+    }
+    h1 { color: #eee; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 2px; opacity: 0.7; }
+    .calc {
+      background: #16213e;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      width: 320px;
+    }
+    .display {
+      background: #0f3460;
+      border-radius: 12px;
+      padding: 20px 16px;
+      margin-bottom: 20px;
+      text-align: right;
+    }
+    .expr { color: #888; font-size: 0.9rem; min-height: 20px; margin-bottom: 6px; word-break: break-all; }
+    .result { color: white; font-size: 2.4rem; font-weight: 300; word-break: break-all; }
+    .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    button {
+      background: #1a1a2e;
+      color: #eee;
+      border: none;
+      padding: 18px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    button:hover { background: #0f3460; }
+    button:active { transform: scale(0.95); }
+    .op { background: #0f3460; color: #e94560; font-weight: bold; }
+    .op:hover { background: #e94560; color: white; }
+    .equals { background: #e94560; color: white; font-size: 1.3rem; }
+    .equals:hover { background: #c0392b; }
+    .clear { background: #2d6a4f; color: #d8f3dc; }
+    .clear:hover { background: #1b4332; }
+    .span2 { grid-column: span 2; }
+    .label { color: #888; font-size: 0.75rem; text-align: center; margin-top: 16px; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+  <h1>🧮 WEEK 5 · CALCULATOR</h1>
+
+  <div class="calc">
+    <div class="display">
+      <div class="expr" id="expr"></div>
+      <div class="result" id="result">0</div>
+    </div>
+    <div class="buttons">
+      <button class="clear span2" onclick="clearAll()">AC</button>
+      <button class="op" onclick="deleteLast()">⌫</button>
+      <button class="op" onclick="input('%')">%</button>
+
+      <button onclick="input('7')">7</button>
+      <button onclick="input('8')">8</button>
+      <button onclick="input('9')">9</button>
+      <button class="op" onclick="input('/')">÷</button>
+
+      <button onclick="input('4')">4</button>
+      <button onclick="input('5')">5</button>
+      <button onclick="input('6')">6</button>
+      <button class="op" onclick="input('*')">×</button>
+
+      <button onclick="input('1')">1</button>
+      <button onclick="input('2')">2</button>
+      <button onclick="input('3')">3</button>
+      <button class="op" onclick="input('-')">−</button>
+
+      <button onclick="input('0')">0</button>
+      <button onclick="input('.')">.</button>
+      <button class="equals" onclick="calculate()">=</button>
+      <button class="op" onclick="input('+')">+</button>
+    </div>
+    <div class="label">FNB APP ACADEMY · WEEK 5</div>
+  </div>
+
+  <script>
+    let expr = '';
+    const display = document.getElementById('result');
+    const exprEl = document.getElementById('expr');
+
+    function input(val) {
+      if (expr === 'Error') expr = '';
+      expr += val;
+      display.textContent = expr;
+    }
+
+    function clearAll() {
+      expr = '';
+      display.textContent = '0';
+      exprEl.textContent = '';
+    }
+
+    function deleteLast() {
+      expr = expr.slice(0, -1);
+      display.textContent = expr || '0';
+    }
+
+    function calculate() {
+      try {
+        exprEl.textContent = expr + ' =';
+        const result = Function('"use strict"; return (' + expr + ')')();
+        const rounded = Math.round(result * 1e10) / 1e10;
+        display.textContent = rounded;
+        expr = String(rounded);
+      } catch {
+        display.textContent = 'Error';
+        expr = 'Error';
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Week 2 – CSS Styling</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; }
+
+    header {
+      background: linear-gradient(135deg, #e94560, #0f3460);
+      padding: 60px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 2.5rem; letter-spacing: 2px; }
+    header p { margin-top: 10px; color: #f0a500; font-size: 1.1rem; }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      background: #0f3460;
+      padding: 14px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    nav a:hover { background: #e94560; transform: scale(1.05); }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 40px 20px;
+      justify-content: center;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 24px;
+      width: 260px;
+      border: 1px solid #0f3460;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(233,69,96,0.3); }
+    .card h3 { color: #f0a500; margin-bottom: 10px; font-size: 1.2rem; }
+    .card p { font-size: 0.95rem; color: #aaa; line-height: 1.6; }
+    .card .icon { font-size: 2rem; margin-bottom: 10px; }
+
+    .btn-area { text-align: center; padding: 20px; }
+    .btn {
+      background: #e94560;
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn:hover { background: #f0a500; transform: scale(1.05); }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #0f3460;
+      color: #888;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎨 Week 2 – CSS Styling</h1>
+    <p>FNB App Academy · Making things look good</p>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🎨</div>
+      <h3>Colors</h3>
+      <p>Using background colors, text colors, and gradients to create visual contrast and hierarchy.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔤</div>
+      <h3>Typography</h3>
+      <p>Font families, sizes, weights, and line heights that make content easy and pleasant to read.</p>
+    </div>
+    <div class="card">
+      <div class="icon">✨</div>
+      <h3>Hover Effects</h3>
+      <p>Transitions and transforms that respond to user interaction, giving apps a polished, modern feel.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📐</div>
+      <h3>Layouts</h3>
+      <p>Using Flexbox to arrange elements on a page cleanly, from navigation bars to card grids.</p>
+    </div>
+  </div>
+
+  <div class="btn-area">
+    <button class="btn">Hover Over Me ✨</button>
+  </div>
+
+  <footer>Week 2 · FNB App Academy · CSS Styling Demo</footer>
+
+</body>
+</html>
